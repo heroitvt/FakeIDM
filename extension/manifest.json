@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "FakeIDM — Tự động bắt link tải kiểu IDM",
+  "version": "1.2.0",
+  "description": "Tự động bắt link tải trực tiếp từ Chrome/Edge sang ứng dụng FakeIDM (hỗ trợ chuyển cookies đăng nhập).",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "downloads",
+    "cookies"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:17831/*",
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Cài đặt bắt link FakeIDM"
+  }
+}

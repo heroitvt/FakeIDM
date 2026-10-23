@@ -1,0 +1,40 @@
+{
+  "name": "fakeidm",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "description": "A local HTTP/HTTPS download manager with parallel downloads and resume, for Windows, Linux and macOS",
+  "main": "desktop.cjs",
+  "productName": "FakeIDM",
+  "license": "MIT",
+  "author": "FakeIDM contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroitvt/FakeIDM.git"
+  },
+  "homepage": "https://github.com/heroitvt/FakeIDM#readme",
+  "bugs": {
+    "url": "https://github.com/heroitvt/FakeIDM/issues"
+  },
+  "keywords": [
+    "download-manager",
+    "http",
+    "resume",
+    "electron",
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "scripts": {
+    "start": "node server.mjs",
+    "desktop": "node scripts/desktop.mjs",
+    "test": "node --test test/download.test.mjs test/platform.test.mjs test/regressions.test.mjs test/extension.test.mjs",
+    "package:win": "node scripts/package.mjs win32",
+    "package:linux": "node scripts/package.mjs linux",
+    "package:mac": "bash build-macos.sh",
+    "check": "node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

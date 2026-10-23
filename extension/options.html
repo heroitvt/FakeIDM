@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Cài đặt kết nối & Bắt link FakeIDM (IDM Module)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1e293b;
+      background: #f1f5f9;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.5;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 16px;
+    }
+    .logo-badge {
+      font-size: 24px;
+      background: #0284c7;
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    p {
+      color: #64748b;
+      font-size: 13px;
+      margin: 4px 0 0;
+    }
+    .field {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="password"], textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font: inherit;
+      color: #0f172a;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input:focus, textarea:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+    }
+    textarea {
+      resize: vertical;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 18px;
+      cursor: pointer;
+    }
+    .checkbox-wrap input {
+      margin-top: 3px;
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+      accent-color: #0284c7;
+    }
+    .checkbox-label strong {
+      display: block;
+      color: #0f172a;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .checkbox-label span {
+      display: block;
+      color: #64748b;
+      font-size: 12px;
+    }
+    button {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 11px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.15s;
+    }
+    button:hover {
+      background: #0369a1;
+    }
+    #status {
+      font-size: 12.5px;
+      margin-top: 14px;
+      font-weight: 500;
+    }
+    .status-ok { color: #15803d; }
+    .status-err { color: #b91c1c; }
+    small.hint {
+      display: block;
+      color: #64748b;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="logo-badge">⚡</div>
+      <div>
+        <h1>FakeIDM — Tự động bắt link (IDM Module)</h1>
+        <p>Kết nối tiện ích với ứng dụng FakeIDM trên máy Mac của bạn</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="token">Mã kết nối (Pairing Token):</label>
+      <input id="token" type="password" placeholder="Dán mã từ FakeIDM → Cài đặt → Mã kết nối" required>
+      <small class="hint">Mở FakeIDM trên máy bạn, vào Cài đặt để sao chép mã kết nối an toàn.</small>
+    </div>
+
+    <!-- Toggle Auto Catch -->
+    <label class="checkbox-wrap">
+      <input type="checkbox" id="autoCatch" checked>
+      <div class="checkbox-label">
+        <strong>Tự động bắt link tải (Giống IDM)</strong>
+        <span>Khi bạn bấm link tải file trên web, tiện ích sẽ tự động hủy tải của trình duyệt và gửi ngay sang FakeIDM để tải đa luồng.</span>
+      </div>
+    </label>
+
+    <!-- File Types list -->
+    <div class="field">
+      <label for="fileTypes">Định dạng tập tin tự động bắt (phân cách bằng dấu phẩy):</label>
+      <textarea id="fileTypes" rows="3" placeholder="ZIP, RAR, 7Z, TAR, GZ, ISO, DMG, PKG, EXE, MSI, APK, BIN, PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, MP3, WAV, FLAC, MP4, MKV, AVI, MOV, WMV, FLV, WEBM, TORRENT"></textarea>
+      <small class="hint">Nhập <code>*</code> nếu muốn bắt tất cả mọi loại tập tin tải xuống.</small>
+    </div>
+
+    <button id="save">Lưu cài đặt & Kiểm tra kết nối</button>
+    <p id="status" role="status"></p>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

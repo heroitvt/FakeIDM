@@ -1,0 +1,54 @@
+name: Build portable apps
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  portable:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: win
+          - os: ubuntu-latest
+            target: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: npm run package:${{ matrix.target }}
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: FakeIDM-${{ matrix.target }}-x64
+          path: dist/*
+          if-no-files-found: error
+  mac:
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run package:mac
+      - run: |
+          mkdir -p dist
+          version=$(node -p "require('./package.json').version")
+          ditto -c -k --sequesterRsrc --keepParent build/FakeIDM.app "dist/FakeIDM-$version-Mac-Intel.zip"
+          cd dist
+          shasum -a 256 *.zip > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: FakeIDM-Mac-Intel
+          path: dist/*
+          if-no-files-found: error

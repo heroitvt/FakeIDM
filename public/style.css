@@ -1,0 +1,1409 @@
+/* ==========================================================================
+   FakeIDM — Internet Download Manager (IDM) Theme
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --idm-bg: #f4f6f9;
+  --idm-chrome: #edf0f5;
+  --idm-chrome-hover: #e2e7ef;
+  --idm-border: #cbd3e1;
+  --idm-border-light: #e2e8f0;
+  --idm-text: #1e293b;
+  --idm-text-muted: #64748b;
+  --idm-text-dim: #94a3b8;
+  --idm-primary: #0284c7;
+  --idm-primary-dark: #0369a1;
+  --idm-selected-bg: #dbeafe;
+  --idm-selected-text: #1e3a8a;
+  --idm-selected-border: #3b82f6;
+  --idm-white: #ffffff;
+  --idm-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --idm-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+body.idm-theme {
+  font-family: var(--idm-font);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--idm-text);
+  background-color: var(--idm-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Form controls */
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+input, textarea, select {
+  user-select: text;
+  -webkit-user-select: text;
+  border: 1px solid var(--idm-border);
+  background: var(--idm-white);
+  border-radius: 4px;
+  padding: 7px 10px;
+  color: var(--idm-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--idm-primary);
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+kbd {
+  font-family: var(--idm-font-mono);
+  font-size: 10px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: var(--idm-text-muted);
+}
+
+/* ==========================================================================
+   1. IDM Menubar
+   ========================================================================== */
+.idm-menubar {
+  height: 32px;
+  background: var(--idm-chrome);
+  border-bottom: 1px solid var(--idm-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.menubar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 10px;
+  border-right: 1px solid var(--idm-border);
+}
+
+.menu-logo {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.menu-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.menu-title small {
+  font-size: 10px;
+  background: #0284c7;
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 800;
+  margin-left: 2px;
+  letter-spacing: 0.5px;
+}
+
+.menu-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.menu-dropdown {
+  position: relative;
+}
+
+.menu-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  border-radius: 3px;
+  transition: background-color 0.1s;
+}
+
+.menu-btn:hover, .menu-btn.active {
+  background-color: var(--idm-chrome-hover);
+  color: #0f172a;
+}
+
+.dropdown-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--idm-white);
+  border: 1px solid var(--idm-border);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  min-width: 220px;
+  padding: 4px 0;
+  z-index: 100;
+}
+
+.dropdown-panel.show {
+  display: block;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 7px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  color: #334155;
+  transition: background-color 0.1s;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f5f9;
+  color: #0284c7;
+}
+
+.dropdown-item .dd-icon {
+  width: 18px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.dropdown-item .dd-text {
+  flex: 1;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--idm-border-light);
+  margin: 4px 0;
+}
+
+.menubar-right .env-tag {
+  font-size: 11px;
+  color: var(--idm-text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   2. IDM Iconic Toolbar
+   ========================================================================== */
+.idm-toolbar {
+  height: 70px;
+  background: linear-gradient(180deg, #ffffff 0%, #f1f4f8 100%);
+  border-bottom: 1px solid var(--idm-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tb-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 9px;
+  min-width: 58px;
+  height: 60px;
+  border-radius: 4px;
+  color: #334155;
+  transition: all 0.12s ease;
+  position: relative;
+}
+
+.tb-btn:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: #0f172a;
+}
+
+.tb-btn:active {
+  background: rgba(2, 132, 199, 0.16);
+  transform: translateY(1px);
+}
+
+.tb-icon-circle {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s;
+}
+
+.tb-icon-circle svg {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+.tb-btn:hover .tb-icon-circle {
+  transform: scale(1.06);
+}
+
+.tb-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+.tb-separator {
+  width: 1px;
+  height: 38px;
+  background: var(--idm-border);
+  margin: 0 6px;
+}
+
+.toolbar-search-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.search-input-box {
+  display: flex;
+  align-items: center;
+  background: var(--idm-white);
+  border: 1px solid var(--idm-border);
+  border-radius: 20px;
+  padding: 3px 12px;
+  width: 250px;
+  transition: width 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input-box:focus-within {
+  width: 320px;
+  border-color: var(--idm-primary);
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+}
+
+.search-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--idm-text-muted);
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
+.search-input-box input {
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  font-size: 12px;
+  width: 100%;
+  box-shadow: none !important;
+}
+
+.search-input-box kbd {
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   3. IDM Workspace Layout (Sidebar + Main Table)
+   ========================================================================== */
+.idm-workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Left Sidebar - IDM Categories Tree */
+.idm-sidebar {
+  width: 220px;
+  background: #f8fafc;
+  border-right: 1px solid var(--idm-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.idm-sidebar.hidden {
+  display: none;
+}
+
+.sidebar-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--idm-text-muted);
+  padding: 10px 14px 6px;
+  border-bottom: 1px solid var(--idm-border-light);
+}
+
+.idm-tree {
+  flex: 1;
+  padding: 6px 0;
+  overflow-y: auto;
+}
+
+.tree-group {
+  margin-bottom: 8px;
+}
+
+.tree-group-header {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--idm-text-dim);
+  padding: 8px 14px 4px;
+}
+
+.tree-node {
+  width: 100%;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  text-align: left;
+  transition: background-color 0.1s, color 0.1s;
+  position: relative;
+}
+
+.tree-node:hover {
+  background: #edf3f9;
+  color: #0f172a;
+}
+
+.tree-node.selected {
+  background: var(--idm-selected-bg);
+  color: var(--idm-selected-text);
+  font-weight: 600;
+}
+
+.tree-node.selected::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--idm-selected-border);
+}
+
+.tree-children {
+  padding-left: 12px;
+}
+
+.tree-children .tree-node {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 11.5px;
+}
+
+.tree-icon {
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.tree-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-count {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.tree-node.selected .tree-count {
+  background: #bfdbfe;
+  color: #1e40af;
+}
+
+.count-active {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.count-completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.count-paused {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.count-scheduled {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+/* Sidebar Monitor (Bottom) */
+.sidebar-monitor {
+  padding: 10px;
+  border-top: 1px solid var(--idm-border);
+  background: #ffffff;
+}
+
+.monitor-card {
+  background: #f8fafc;
+  border: 1px solid var(--idm-border-light);
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.mc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--idm-text-muted);
+  margin-bottom: 5px;
+}
+
+.mc-speed {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.mc-speed small {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.sparkline-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 24px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.sparkline-bar i {
+  flex: 1;
+  background: #38bdf8;
+  border-radius: 1px 1px 0 0;
+  min-height: 1px;
+}
+
+.monitor-meta {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: var(--idm-text-muted);
+  margin-top: 6px;
+  padding-left: 2px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+  margin-right: 5px;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+/* ==========================================================================
+   4. Main Content: IDM Data Grid Table
+   ========================================================================== */
+.idm-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.table-frame {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Table Header */
+.idm-table-header {
+  display: grid;
+  grid-template-columns: minmax(200px, 2.4fr) 85px 120px 85px 95px 150px 85px 85px;
+  height: 30px;
+  background: linear-gradient(180deg, #f8fafc 0%, #edf0f5 100%);
+  border-bottom: 1px solid var(--idm-border);
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.th-col {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-right: 1px solid #d8dde6;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color 0.1s;
+}
+
+.th-col:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.th-col:last-child {
+  border-right: none;
+  cursor: default;
+}
+
+.th-col .sort-icon {
+  margin-left: 4px;
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+.th-col.sorted-asc .sort-icon::after {
+  content: "▲";
+}
+
+.th-col.sorted-desc .sort-icon::after {
+  content: "▼";
+}
+
+/* Table Body */
+.idm-table-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #ffffff;
+  outline: none;
+}
+
+/* Row item */
+.idm-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 2.4fr) 85px 120px 85px 95px 150px 85px 85px;
+  min-height: 38px;
+  border-bottom: 1px solid #edf2f7;
+  align-items: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.08s;
+}
+
+.idm-row:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.idm-row:hover {
+  background-color: #f0f7ff;
+}
+
+.idm-row.selected {
+  background-color: var(--idm-selected-bg) !important;
+  color: var(--idm-selected-text);
+  outline: 1px solid #93c5fd;
+  outline-offset: -1px;
+}
+
+.idm-cell {
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+/* File Name Cell */
+.cell-name {
+  gap: 8px;
+}
+
+.file-type-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.badge-cat-compressed { background: #d97706; }
+.badge-cat-documents { background: #2563eb; }
+.badge-cat-music { background: #db2777; }
+.badge-cat-video { background: #7c3aed; }
+.badge-cat-programs { background: #059669; }
+.badge-cat-other { background: #64748b; }
+
+.file-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.file-primary-name {
+  font-weight: 600;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.idm-row.selected .file-primary-name {
+  color: #1e3a8a;
+}
+
+.file-host-sub {
+  font-size: 10px;
+  color: var(--idm-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Status Badge */
+.status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.pill-downloading {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.pill-probing {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.pill-assembling {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.pill-completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.pill-paused {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.pill-queued {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.pill-scheduled {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.pill-error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.pulse-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  animation: idm-pulse 1.2s infinite;
+}
+
+@keyframes idm-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
+/* Progress bar inside table (Classic IDM Style!) */
+.cell-progress {
+  padding-right: 12px;
+}
+
+.idm-progress-container {
+  width: 100%;
+  height: 18px;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idm-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
+  transition: width 0.3s ease;
+  border-right: 1px solid #0891b2;
+}
+
+.idm-row[data-status="paused"] .idm-progress-fill {
+  background: linear-gradient(90deg, #94a3b8 0%, #cbd5e1 100%);
+  border-right-color: #64748b;
+}
+
+.idm-row[data-status="error"] .idm-progress-fill {
+  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+  border-right-color: #dc2626;
+}
+
+.idm-progress-text {
+  position: relative;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f172a;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Action buttons inside row */
+.cell-actions {
+  display: flex;
+  gap: 3px;
+  justify-content: flex-end;
+}
+
+.row-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 12px;
+  color: #334155;
+  transition: all 0.1s;
+}
+
+.row-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.row-btn.btn-delete:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* Empty State */
+.idm-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-badge {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 14px;
+}
+
+.idm-empty h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.idm-empty p {
+  font-size: 12px;
+  color: var(--idm-text-muted);
+  max-width: 380px;
+  margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   5. IDM Multi-Connection Segments Dock (Bottom)
+   ========================================================================== */
+.idm-segments-dock {
+  background: #f8fafc;
+  border-top: 2px solid #cbd5e1;
+  padding: 10px 14px;
+  max-height: 180px;
+  overflow-y: auto;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.dock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.dock-header h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dock-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px 16px;
+  font-size: 11px;
+  background: #ffffff;
+  padding: 8px 12px;
+  border: 1px solid var(--idm-border-light);
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.meta-item {
+  display: flex;
+  gap: 6px;
+}
+
+.meta-item dt {
+  color: var(--idm-text-muted);
+  font-weight: 500;
+}
+
+.meta-item dd {
+  color: #0f172a;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Segments Thread Visualizer */
+.segments-wrapper {
+  margin-top: 6px;
+}
+
+.segments-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--idm-text-muted);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.segments-bar {
+  display: flex;
+  gap: 3px;
+  height: 16px;
+  background: #e2e8f0;
+  padding: 2px;
+  border-radius: 3px;
+  border: 1px solid #cbd5e1;
+}
+
+.segment-chunk {
+  flex: 1;
+  background: #cbd5e1;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.segment-chunk i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+  border-radius: 2px;
+  transition: width 0.2s;
+}
+
+/* ==========================================================================
+   6. IDM Status Bar (Bottom)
+   ========================================================================== */
+.idm-statusbar {
+  height: 26px;
+  background: var(--idm-chrome);
+  border-top: 1px solid var(--idm-border);
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: #334155;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+.sb-segment {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 100%;
+  border-right: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.sb-right {
+  margin-left: auto;
+  border-right: none;
+}
+
+.app-ver {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--idm-text-muted);
+}
+
+/* ==========================================================================
+   7. Context Menu (Right Click)
+   ========================================================================== */
+.idm-context-menu {
+  position: fixed;
+  background: #ffffff;
+  border: 1px solid var(--idm-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  min-width: 190px;
+  padding: 4px 0;
+  z-index: 1000;
+}
+
+.ctx-item {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e293b;
+  text-align: left;
+  transition: background-color 0.1s;
+}
+
+.ctx-item:hover {
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
+.ctx-item.ctx-danger:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.ctx-divider {
+  height: 1px;
+  background: var(--idm-border-light);
+  margin: 4px 0;
+}
+
+/* ==========================================================================
+   8. IDM Modal Dialogs
+   ========================================================================== */
+dialog {
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: 95vw;
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.idm-dialog-box {
+  background: #ffffff;
+  border: 1px solid var(--idm-border);
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  width: 520px;
+  max-width: 95vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.idm-dialog-header {
+  background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+  border-bottom: 1px solid var(--idm-border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.idh-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.idh-icon {
+  font-size: 20px;
+}
+
+.idh-title h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.idh-title small {
+  font-size: 11px;
+  color: var(--idm-text-muted);
+}
+
+.btn-close {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--idm-text-muted);
+  transition: all 0.1s;
+}
+
+.btn-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.idm-dialog-body {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.form-field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.field-hint {
+  display: block;
+  font-size: 10.5px;
+  color: var(--idm-text-muted);
+  margin-top: 4px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 6px;
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.idm-callout {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 4px;
+  padding: 9px 12px;
+  font-size: 11px;
+  color: #166534;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.form-error {
+  font-size: 11px;
+  color: #dc2626;
+  margin-top: 6px;
+}
+
+.idm-dialog-footer {
+  background: #f8fafc;
+  border-top: 1px solid var(--idm-border-light);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-idm-primary {
+  background: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 7px 16px;
+  border-radius: 4px;
+  transition: background-color 0.12s;
+}
+
+.btn-idm-primary:hover {
+  background: #0369a1;
+}
+
+.btn-idm-secondary {
+  background: #ffffff;
+  border: 1px solid var(--idm-border);
+  color: #334155;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  transition: all 0.12s;
+}
+
+.btn-idm-secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.idm-details-card {
+  margin-top: 12px;
+  border: 1px solid var(--idm-border-light);
+  border-radius: 4px;
+  padding: 8px 12px;
+  background: #fafbfc;
+}
+
+.idm-details-card summary {
+  cursor: pointer;
+  color: #0284c7;
+  font-size: 11px;
+}
+
+.details-content {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #334155;
+}
+
+.help-body .help-item {
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.help-body .help-item p {
+  color: var(--idm-text-muted);
+  margin-top: 3px;
+}
+
+/* Properties Modal specifics */
+.prop-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px 12px;
+  font-size: 11.5px;
+  margin-bottom: 14px;
+}
+
+.prop-grid dt {
+  font-weight: 600;
+  color: var(--idm-text-muted);
+}
+
+.prop-grid dd {
+  color: #0f172a;
+  word-break: break-all;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.prop-threads-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+.prop-threads-table th {
+  background: #f1f5f9;
+  padding: 5px 8px;
+  text-align: left;
+  border: 1px solid var(--idm-border-light);
+  font-weight: 600;
+  color: #475569;
+}
+
+.prop-threads-table td {
+  padding: 5px 8px;
+  border: 1px solid var(--idm-border-light);
+}
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Drag & drop overlay */
+#drop-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 132, 199, 0.15);
+  backdrop-filter: blur(4px);
+  border: 3px dashed #0284c7;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.drop-card {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.drop-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.drop-card h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.drop-card p {
+  font-size: 12px;
+  color: var(--idm-text-muted);
+}
+
+/* ==========================================================================
+   9. Responsive & compact rules
+   ========================================================================== */
+@media (max-width: 900px) {
+  .idm-sidebar {
+    width: 180px;
+  }
+  .idm-table-header, .idm-row {
+    grid-template-columns: minmax(180px, 2fr) 75px 105px 75px 80px 110px 0 75px;
+  }
+  .col-downloaded, .cell-downloaded {
+    display: none !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .idm-sidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+  }
+  .search-input-box {
+    width: 160px;
+  }
+  .idm-table-header, .idm-row {
+    grid-template-columns: minmax(140px, 1.8fr) 70px 95px 90px 65px;
+  }
+  .col-eta, .cell-eta, .col-speed, .cell-speed, .col-downloaded, .cell-downloaded {
+    display: none !important;
+  }
+}

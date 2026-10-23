@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FakeIDM — Trình quản lý tải xuống kiểu IDM</title>
+  <link rel="icon" href="/mark.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="idm-theme">
+  <!-- IDM Top Menu Bar -->
+  <header class="idm-menubar">
+    <div class="menubar-left">
+      <div class="menu-brand">
+        <img src="/mark.svg" alt="FakeIDM" class="menu-logo">
+        <span class="menu-title">FakeIDM <small>IDM</small></span>
+      </div>
+
+      <nav class="menu-nav">
+        <div class="menu-dropdown">
+          <button class="menu-btn" data-toggle="menu-tasks">Tác vụ ▾</button>
+          <div class="dropdown-panel" id="menu-tasks">
+            <button class="dropdown-item" data-action="new">
+              <span class="dd-icon">➕</span>
+              <span class="dd-text">Thêm URL mới…</span>
+              <kbd>⌘N</kbd>
+            </button>
+            <button class="dropdown-item" data-action="resume-all">
+              <span class="dd-icon">▶️</span>
+              <span class="dd-text">Tiếp tục tất cả</span>
+            </button>
+            <button class="dropdown-item" data-action="pause-all">
+              <span class="dd-icon">⏸️</span>
+              <span class="dd-text">Tạm dừng tất cả</span>
+            </button>
+            <button class="dropdown-item" data-action="clean-completed">
+              <span class="dd-icon">🧹</span>
+              <span class="dd-text">Dọn dẹp file hoàn tất</span>
+            </button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" data-action="folder">
+              <span class="dd-icon">📂</span>
+              <span class="dd-text">Mở thư mục tải xuống</span>
+              <kbd>⌘O</kbd>
+            </button>
+            <button class="dropdown-item" data-action="settings">
+              <span class="dd-icon">⚙️</span>
+              <span class="dd-text">Cài đặt…</span>
+              <kbd>⌘,</kbd>
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-dropdown">
+          <button class="menu-btn" data-toggle="menu-view">Hiển thị ▾</button>
+          <div class="dropdown-panel" id="menu-view">
+            <button class="dropdown-item" data-action="toggle-sidebar">
+              <span class="dd-icon">◧</span>
+              <span class="dd-text">Ẩn / Hiện Cây thể loại</span>
+            </button>
+            <button class="dropdown-item" data-action="toggle-details">
+              <span class="dd-icon">▤</span>
+              <span class="dd-text">Ẩn / Hiện Phân đoạn luồng</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-dropdown">
+          <button class="menu-btn" data-toggle="menu-help">Trợ giúp ▾</button>
+          <div class="dropdown-panel" id="menu-help">
+            <button class="dropdown-item" data-action="help">
+              <span class="dd-icon">📖</span>
+              <span class="dd-text">Hướng dẫn sử dụng</span>
+            </button>
+            <button class="dropdown-item" data-action="about">
+              <span class="dd-icon">ℹ️</span>
+              <span class="dd-text">Giới thiệu FakeIDM IDM</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="menubar-right">
+      <span class="env-tag">Desktop · HTTP Range</span>
+    </div>
+  </header>
+
+  <!-- IDM Main Iconic Toolbar -->
+  <section class="idm-toolbar">
+    <div class="toolbar-actions">
+      <!-- Add URL -->
+      <button class="tb-btn tb-add" data-action="new" title="Thêm liên kết tải xuống mới (⌘N)">
+        <div class="tb-icon-circle bg-green">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#16a34a"/><path d="M12 7v10M7 12h10" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+        </div>
+        <span class="tb-label">Thêm URL</span>
+      </button>
+
+      <!-- Resume -->
+      <button class="tb-btn tb-resume" data-action="resume-selected" title="Tiếp tục lượt tải đang chọn hoặc tất cả">
+        <div class="tb-icon-circle bg-emerald">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#059669"/><polygon points="9.5,7 17,12 9.5,17" fill="#fff"/></svg>
+        </div>
+        <span class="tb-label">Tiếp tục</span>
+      </button>
+
+      <!-- Pause -->
+      <button class="tb-btn tb-pause" data-action="pause-selected" title="Tạm dừng lượt tải đang chọn">
+        <div class="tb-icon-circle bg-amber">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d97706"/><rect x="8" y="7" width="3" height="10" rx="1" fill="#fff"/><rect x="13" y="7" width="3" height="10" rx="1" fill="#fff"/></svg>
+        </div>
+        <span class="tb-label">Tạm dừng</span>
+      </button>
+
+      <!-- Stop All -->
+      <button class="tb-btn tb-stopall" data-action="pause-all" title="Dừng tất cả lượt đang tải">
+        <div class="tb-icon-circle bg-red">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#dc2626"/><rect x="7.5" y="7.5" width="9" height="9" rx="1.5" fill="#fff"/></svg>
+        </div>
+        <span class="tb-label">Dừng hết</span>
+      </button>
+
+      <div class="tb-separator"></div>
+
+      <!-- Delete -->
+      <button class="tb-btn tb-delete" data-action="delete-selected" title="Xóa lượt tải đang chọn (Delete)">
+        <div class="tb-icon-circle bg-rose">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e11d48"/><path d="M8 8l8 8M16 8l-8 8" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="tb-label">Xóa</span>
+      </button>
+
+      <!-- Clean Completed -->
+      <button class="tb-btn tb-clean" data-action="clean-completed" title="Dọn dẹp các lượt tải đã hoàn tất">
+        <div class="tb-icon-circle bg-sky">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#0284c7"/><path d="M6.5 13.5l3.5 3.5 7.5-8.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="tb-label">Dọn dẹp</span>
+      </button>
+
+      <div class="tb-separator"></div>
+
+      <!-- Settings -->
+      <button class="tb-btn tb-settings" data-action="settings" title="Cài đặt tùy chọn FakeIDM (⌘,)">
+        <div class="tb-icon-circle bg-slate">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#475569"/><circle cx="12" cy="12" r="2.8" fill="#fff"/><path d="M12 4.5v2.2M12 17.3v2.2M4.5 12h2.2M17.3 12h2.2M6.7 6.7l1.6 1.6M15.7 15.7l1.6 1.6M6.7 17.3l1.6-1.6M15.7 8.3l1.6-1.6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <span class="tb-label">Cài đặt</span>
+      </button>
+
+      <!-- Scheduler -->
+      <button class="tb-btn tb-scheduler" data-action="scheduler" title="Xem danh sách hẹn giờ">
+        <div class="tb-icon-circle bg-purple">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#7c3aed"/><path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </div>
+        <span class="tb-label">Hẹn giờ</span>
+      </button>
+
+      <!-- Open Folder -->
+      <button class="tb-btn tb-folder" data-action="folder" title="Mở thư mục tải xuống trong trình quản lý file (⌘O)">
+        <div class="tb-icon-circle bg-amber-folder">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#f59e0b"/><path d="M6 8h4l1.5 2H18v7H6z" fill="#fff"/></svg>
+        </div>
+        <span class="tb-label">Thư mục</span>
+      </button>
+    </div>
+
+    <!-- Search Box (Right) -->
+    <div class="toolbar-search-wrap">
+      <div class="search-input-box">
+        <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="search" placeholder="Tìm tên file hoặc liên kết…" aria-label="Tìm lượt tải">
+        <kbd>⌘K</kbd>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDM Main Workspace: Sidebar Tree + Data Grid Table -->
+  <div class="idm-workspace">
+    <!-- Left Categories Tree -->
+    <aside class="idm-sidebar" id="sidebar">
+      <div class="sidebar-title">DANH MỤC (CATEGORIES)</div>
+
+      <nav class="idm-tree" id="nav">
+        <!-- Main Filter Branches -->
+        <div class="tree-group">
+          <button class="tree-node selected" data-filter="all">
+            <span class="tree-icon">📂</span>
+            <span class="tree-name">Tất cả lượt tải</span>
+            <span class="tree-count" id="count-all">0</span>
+          </button>
+
+          <div class="tree-children">
+            <button class="tree-node" data-filter="active">
+              <span class="tree-icon">⬇️</span>
+              <span class="tree-name">Đang tải</span>
+              <span class="tree-count count-active" id="count-active">0</span>
+            </button>
+            <button class="tree-node" data-filter="completed">
+              <span class="tree-icon">✅</span>
+              <span class="tree-name">Hoàn tất</span>
+              <span class="tree-count count-completed" id="count-completed">0</span>
+            </button>
+            <button class="tree-node" data-filter="paused">
+              <span class="tree-icon">⏸️</span>
+              <span class="tree-name">Tạm dừng</span>
+              <span class="tree-count count-paused" id="count-paused">0</span>
+            </button>
+            <button class="tree-node" data-filter="scheduled">
+              <span class="tree-icon">🕒</span>
+              <span class="tree-name">Đã hẹn giờ</span>
+              <span class="tree-count count-scheduled" id="count-scheduled">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- IDM File Type Categories -->
+        <div class="tree-group file-categories-group">
+          <div class="tree-group-header">PHÂN LOẠI FILE</div>
+          <button class="tree-node" data-filter="cat-compressed">
+            <span class="tree-icon">📦</span>
+            <span class="tree-name">File Nén (Zip, Rar…)</span>
+            <span class="tree-count" id="count-cat-compressed">0</span>
+          </button>
+          <button class="tree-node" data-filter="cat-documents">
+            <span class="tree-icon">📄</span>
+            <span class="tree-name">Tài liệu (PDF, Doc…)</span>
+            <span class="tree-count" id="count-cat-documents">0</span>
+          </button>
+          <button class="tree-node" data-filter="cat-music">
+            <span class="tree-icon">🎵</span>
+            <span class="tree-name">Âm nhạc (MP3, Flac…)</span>
+            <span class="tree-count" id="count-cat-music">0</span>
+          </button>
+          <button class="tree-node" data-filter="cat-video">
+            <span class="tree-icon">🎬</span>
+            <span class="tree-name">Video (MP4, MKV…)</span>
+            <span class="tree-count" id="count-cat-video">0</span>
+          </button>
+          <button class="tree-node" data-filter="cat-programs">
+            <span class="tree-icon">💻</span>
+            <span class="tree-name">Chương trình (App, DMG…)</span>
+            <span class="tree-count" id="count-cat-programs">0</span>
+          </button>
+          <button class="tree-node" data-filter="cat-other">
+            <span class="tree-icon">📁</span>
+            <span class="tree-name">Khác</span>
+            <span class="tree-count" id="count-cat-other">0</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Sidebar Bottom Mini Info -->
+      <div class="sidebar-monitor">
+        <div class="monitor-card">
+          <div class="mc-head">
+            <span class="mc-label">⚡ Tốc độ hiện thời</span>
+            <strong class="mc-speed" id="stat-speed">0 <small>KB/s</small></strong>
+          </div>
+          <div class="sparkline-bar" id="spark"></div>
+        </div>
+        <div class="monitor-meta">
+          <span class="status-dot"></span>
+          <span>Máy chủ nội bộ 17831</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Table Area -->
+    <main class="idm-main-content">
+      <!-- Table Header & Scrollable List -->
+      <div class="table-frame">
+        <div class="idm-table-header" id="table-header">
+          <div class="th-col col-name" data-sort="name">Tên tập tin <span class="sort-icon"></span></div>
+          <div class="th-col col-size" data-sort="size">Dung lượng <span class="sort-icon"></span></div>
+          <div class="th-col col-status" data-sort="status">Trạng thái <span class="sort-icon"></span></div>
+          <div class="th-col col-eta" data-sort="eta">Còn lại <span class="sort-icon"></span></div>
+          <div class="th-col col-speed" data-sort="speed">Tốc độ tải <span class="sort-icon"></span></div>
+          <div class="th-col col-progress" data-sort="progress">Tiến độ <span class="sort-icon"></span></div>
+          <div class="th-col col-downloaded" data-sort="downloaded">Đã tải <span class="sort-icon"></span></div>
+          <div class="th-col col-actions">Thao tác</div>
+        </div>
+
+        <div class="idm-table-body" id="downloads-list" tabindex="0" role="list"></div>
+
+        <!-- Empty Placeholder -->
+        <div class="idm-empty" id="empty">
+          <div class="empty-badge">
+            <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#e0f2fe"/><path d="M24 13v17M17 23l7 7 7-7M12 35h24" stroke="#0284c7" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h2>Chưa có lượt tải nào ở đây.</h2>
+          <p>Dán liên kết tải hoặc kéo file vào đây. FakeIDM sẽ tải đa luồng như IDM.</p>
+          <button class="btn-idm-primary" data-action="new">＋ Thêm lượt tải mới</button>
+        </div>
+      </div>
+
+      <!-- IDM Connection Segments Dock (Collapsed/Expanded at bottom) -->
+      <section class="idm-segments-dock" id="detail" hidden>
+        <!-- Populated via renderDetail -->
+      </section>
+    </main>
+  </div>
+
+  <!-- IDM Classic Status Bar -->
+  <footer class="idm-statusbar">
+    <div class="sb-segment sb-conn">
+      <span class="status-dot"></span>
+      <span id="connection-status">Đang kết nối…</span>
+    </div>
+    <div class="sb-segment sb-count">
+      <span id="list-count">0 lượt tải</span>
+    </div>
+    <div class="sb-segment sb-active">
+      <span>Đang tải: <b id="stat-active">0</b> lượt</span>
+    </div>
+    <div class="sb-segment sb-done">
+      <span>Đã xong: <b id="stat-done">0</b> file (<span id="stat-bytes">0 B</span>)</span>
+    </div>
+    <div class="sb-segment sb-queue">
+      <span id="stat-queue">Hàng đợi sẵn sàng</span>
+    </div>
+    <div class="sb-segment sb-right">
+      <span class="app-ver">FakeIDM v1.2.0 · IDM Edition</span>
+    </div>
+  </footer>
+
+  <!-- Context Menu (Chuột phải trên hàng) -->
+  <div class="idm-context-menu" id="context-menu" hidden>
+    <button class="ctx-item" data-ctx="resume"><span>▶️</span> Tiếp tục tải</button>
+    <button class="ctx-item" data-ctx="pause"><span>⏸️</span> Tạm dừng</button>
+    <button class="ctx-item" data-ctx="reveal"><span>📂</span> Mở thư mục chứa</button>
+    <button class="ctx-item" data-ctx="copy-url"><span>📋</span> Sao chép liên kết tải</button>
+    <button class="ctx-item" data-ctx="refresh-url"><span>🔄</span> Làm mới liên kết (Refresh URL)</button>
+    <button class="ctx-item" data-ctx="properties"><span>ℹ️</span> Thuộc tính & Chi tiết luồng</button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item ctx-danger" data-ctx="remove"><span>🗑️</span> Xóa khỏi danh sách</button>
+  </div>
+
+  <!-- Dialog 1: Add Download Modal (IDM "Enter new address to download") -->
+  <dialog id="add-dialog">
+    <form id="add-form" class="idm-dialog-box">
+      <div class="idm-dialog-header">
+        <div class="idh-title">
+          <div class="idh-icon">➕</div>
+          <div>
+            <h3>Thêm địa chỉ tải xuống mới</h3>
+            <small>Hỗ trợ HTTP & HTTPS, tự nhận diện tên file</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-close>×</button>
+      </div>
+
+      <div class="idm-dialog-body">
+        <label class="form-field">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <span class="field-label" style="margin-bottom:0;">Địa chỉ tải xuống (URL):</span>
+            <button type="button" class="btn-idm-secondary" id="btn-paste-clip" style="font-size:11px;padding:2px 8px;">📋 Dán từ Clipboard</button>
+          </div>
+          <textarea id="urls" required rows="3" placeholder="https://example.com/file.zip&#10;Có thể dán nhiều link, mỗi link một dòng."></textarea>
+        </label>
+
+        <label class="form-field">
+          <span class="field-label">Tên lưu file <small>(Tùy chọn, để trống sẽ tự động lấy tên từ máy chủ)</small>:</span>
+          <input id="filename" placeholder="Tự động nhận tên từ máy chủ">
+        </label>
+
+        <div class="form-row-2">
+          <label class="form-field">
+            <span class="field-label">Số luồng kết nối song song:</span>
+            <select id="connections">
+              <option value="1">1 kết nối (Đơn luồng)</option>
+              <option value="2">2 kết nối</option>
+              <option value="4">4 kết nối</option>
+              <option value="8" selected>8 kết nối (Khuyến nghị)</option>
+              <option value="16">16 kết nối (Tối đa)</option>
+            </select>
+          </label>
+
+          <label class="form-field">
+            <span class="field-label">Hẹn giờ bắt đầu <small>(Để trống để tải ngay)</small>:</span>
+            <input id="schedule" type="datetime-local">
+          </label>
+        </div>
+
+        <div class="idm-callout">
+          <b>ℹ️ Lưu ý:</b> Máy chủ hỗ trợ HTTP Range sẽ kích hoạt tính năng tải đa luồng và tiếp tục khi bị ngắt. Giữ ứng dụng mở nếu bạn đặt hẹn giờ.
+        </div>
+
+        <p class="form-error" id="add-error"></p>
+      </div>
+
+      <div class="idm-dialog-footer">
+        <button type="button" class="btn-idm-secondary" data-close>Hủy bỏ</button>
+        <button type="submit" class="btn-idm-primary">↓ Bắt đầu tải ngay</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Dialog 2: Settings Modal (IDM Options) -->
+  <dialog id="settings-dialog">
+    <form id="settings-form" class="idm-dialog-box">
+      <div class="idm-dialog-header">
+        <div class="idh-title">
+          <div class="idh-icon">⚙️</div>
+          <div>
+            <h3>Cài đặt FakeIDM (Tùy chọn IDM)</h3>
+            <small>Cấu hình luồng tải, giới hạn tốc độ và thư mục lưu trữ</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-close>×</button>
+      </div>
+
+      <div class="idm-dialog-body">
+        <label class="form-field">
+          <span class="field-label">Thư mục tải xuống mặc định:</span>
+          <div class="input-with-button">
+            <input id="download-dir" required>
+            <button type="button" class="btn-idm-secondary" data-action="folder" title="Mở thư mục hiện tại">📂 Mở</button>
+          </div>
+          <small class="field-hint">Áp dụng cho những lượt tải mới.</small>
+        </label>
+
+        <div class="form-row-2">
+          <label class="form-field">
+            <span class="field-label">Số file tải đồng thời:</span>
+            <input id="concurrency" type="number" min="1" max="6" required>
+            <small class="field-hint">Từ 1 đến 6 file song song</small>
+          </label>
+
+          <label class="form-field">
+            <span class="field-label">Số luồng kết nối mỗi file:</span>
+            <input id="default-connections" type="number" min="1" max="16" required>
+            <small class="field-hint">Từ 1 đến 16 kết nối</small>
+          </label>
+        </div>
+
+        <label class="form-field">
+          <span class="field-label">Giới hạn tổng tốc độ tải (KB/s):</span>
+          <input id="speed-limit" type="number" min="0" max="1000000" required>
+          <small class="field-hint">Đặt 0 = Không giới hạn tốc độ.</small>
+        <!-- IDM File Types Auto-catch configuration -->
+        <div class="settings-group-box" style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:12px;margin:16px 0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <label style="display:flex;align-items:center;gap:8px;font-weight:700;color:#0f172a;cursor:pointer;margin:0;">
+              <input type="checkbox" id="settings-auto-catch" checked style="width:16px;height:16px;accent-color:#0284c7;">
+              <span>Tự động bắt link tải từ trình duyệt (Auto-Catch IDM)</span>
+            </label>
+            <button type="button" class="btn-idm-secondary" id="btn-reset-filetypes" style="font-size:10.5px;padding:2px 8px;">Mặc định</button>
+          </div>
+
+          <label class="form-field" style="margin-bottom:0;">
+            <span class="field-label" style="font-size:11px;">Tự động bắt link các định dạng sau (phân cách bằng dấu phẩy):</span>
+            <textarea id="settings-file-types" rows="3" style="font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.6;"></textarea>
+            <small class="field-hint">Khi bạn nhấp tải một trong các định dạng trên trình duyệt Chrome/Edge, FakeIDM sẽ tự động bắt link và tải đa luồng. Nhập <code>*</code> để bắt tất cả.</small>
+          </label>
+        </div>
+
+        <details class="idm-details-card">
+          <summary><b>🌐 Kết nối Tiện ích Chrome / Edge</b></summary>
+          <div class="details-content">
+            <p>Cài đặt tiện ích mở rộng trong thư mục <code>Source/extension</code>, dán mã kết nối bên dưới để chuột phải tải nhanh:</p>
+            <div class="input-with-button">
+              <input id="pair-token" readonly>
+              <button type="button" class="btn-idm-secondary" id="btn-copy-token">📋 Sao chép</button>
+            </div>
+            <small class="field-hint">Mã này giúp tiện ích kết nối an toàn với máy chủ FakeIDM cục bộ.</small>
+          </div>
+        </details>
+
+        <p class="form-error" id="settings-error"></p>
+      </div>
+
+      <div class="idm-dialog-footer">
+        <button type="button" class="btn-idm-secondary" data-close>Hủy bỏ</button>
+        <button type="submit" class="btn-idm-primary">Lưu cài đặt</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Dialog 3: File Properties / Multi-segment Dialog (IDM File Status) -->
+  <dialog id="properties-dialog">
+    <div class="idm-dialog-box" style="width: 650px;">
+      <div class="idm-dialog-header">
+        <div class="idh-title">
+          <div class="idh-icon">ℹ️</div>
+          <div>
+            <h3 id="prop-title">Chi tiết lượt tải</h3>
+            <small id="prop-url" class="truncate-text"></small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-close>×</button>
+      </div>
+
+      <div class="idm-dialog-body" id="prop-body">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="idm-dialog-footer">
+        <button type="button" class="btn-idm-secondary" id="prop-reveal-btn">📂 Mở trong trình quản lý file</button>
+        <button type="button" class="btn-idm-primary" data-close>Đóng</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dialog 4: Help Dialog -->
+  <dialog id="help-dialog">
+    <div class="idm-dialog-box">
+      <div class="idm-dialog-header">
+        <div class="idh-title">
+          <div class="idh-icon">📖</div>
+          <div>
+            <h3>Hướng dẫn sử dụng FakeIDM</h3>
+            <small>Trình tăng tốc tải xuống đa luồng cá nhân</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-close>×</button>
+      </div>
+
+      <div class="idm-dialog-body help-body">
+        <div class="help-item">
+          <b>1. Thêm lượt tải:</b>
+          <p>Bấm nút <b>Thêm URL</b> trên thanh công cụ hoặc nhấn phím tắt <code>⌘N</code>. Bạn có thể dán link trực tiếp hoặc thả link vào cửa sổ ứng dụng.</p>
+        </div>
+        <div class="help-item">
+          <b>2. Tiếp tục tải khi bị gián đoạn:</b>
+          <p>Chọn dòng file cần tiếp tục rồi bấm nút <b>Tiếp tục</b>. FakeIDM tự động xác thực phiên bản file qua ETag/Last-Modified để tránh ghép sai dữ liệu.</p>
+        </div>
+        <div class="help-item">
+          <b>3. Theo dõi phân đoạn đa luồng:</b>
+          <p>Nhấp đúp chuột vào bất kỳ file nào để xem bảng phân đoạn mạng 8–16 kết nối song song đang tải dữ liệu như thế nào.</p>
+        </div>
+        <div class="idm-callout">
+          <b>Phím tắt nhanh:</b> <code>⌘N</code>: Thêm URL | <code>⌘K</code>: Tìm kiếm | <code>⌘O</code>: Mở thư mục tải | <code>Delete</code>: Xóa lượt tải | <code>Phím cách (Space)</code>: Tạm dừng / Tiếp tục
+        </div>
+      </div>
+
+      <div class="idm-dialog-footer">
+        <button type="button" class="btn-idm-primary" data-close>Đã hiểu</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div id="toast" role="status"></div>
+
+  <!-- Drag and drop overlay -->
+  <div id="drop-overlay">
+    <div class="drop-card">
+      <div class="drop-icon">📥</div>
+      <h2>Thả liên kết vào đây để tải ngay</h2>
+      <p>FakeIDM sẽ tự động mở hộp thoại và nạp liên kết</p>
+    </div>
+  </div>
+
+  <script src="/app.js" defer></script>
+<dialog id="refresh-link-dialog"><form id="refresh-link-form">
+  <div class="idh-title"><h3>Làm mới liên kết</h3></div>
+  <input id="refresh-job-id" type="hidden">
+  <label>Đường dẫn tải mới<input id="refresh-url-input" type="url" required style="width:100%"></label>
+  <p>File sẽ được tải lại từ đầu để tránh ghép dữ liệu từ hai nguồn khác nhau.</p>
+  <p id="refresh-link-error" class="form-error"></p>
+  <div class="dialog-actions"><button type="button" data-close>Hủy</button><button type="submit" class="btn-idm-primary">Cập nhật và tải</button></div>
+</form></dialog>
+</body>
+</html>
