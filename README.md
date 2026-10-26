@@ -12,11 +12,11 @@ Không cần cài Node.js hoặc npm. Các gói hiện tại dành cho **x64**, 
 
 | Hệ điều hành | Gói | Cách mở |
 | --- | --- | --- |
-| Windows x64 | `FakeIDM-1.2.0-Windows-x64.zip` | Giải nén toàn bộ thư mục, mở `FakeIDM.exe` |
-| Linux desktop x64 | `FakeIDM-1.2.0-Linux-x64.tar.gz` | Giải nén, chạy `./Start-FakeIDM.sh` |
+| Windows x64 | `FakeIDM-1.2.0-Windows-x64-Setup.exe` | Mở bộ cài, sau đó chạy FakeIDM từ Start menu |
+| Debian/Ubuntu amd64 | `FakeIDM-1.2.0-Linux-amd64.deb` | `sudo apt install ./FakeIDM-1.2.0-Linux-amd64.deb`, sau đó mở FakeIDM |
 | macOS Intel | `FakeIDM-1.2.0-Mac-Intel.zip` | Giải nén, mở `FakeIDM.app` |
 
-Gói phát hành có thể được đính kèm ở [Releases](https://github.com/heroitvt/FakeIDM/releases). Nếu chưa có release, lấy artifact của lần build thành công trong [Actions](https://github.com/heroitvt/FakeIDM/actions), hoặc tự build bên dưới.
+Bộ cài Windows/Linux được phát hành ở [Releases](https://github.com/heroitvt/FakeIDM/releases). Bản portable Windows ZIP, Linux TAR.GZ và macOS ZIP có trong artifact của workflow `Build portable apps` tại [Actions](https://github.com/heroitvt/FakeIDM/actions).
 
 Windows đề xuất Windows 11. Linux cần desktop dùng glibc, GTK3, NSS, thư viện âm thanh và trình quản lý file; gói không dành cho Alpine/musl hoặc máy chủ không có giao diện. macOS đặt mức tối thiểu 14.0. Xem [hướng dẫn nền tảng](docs/PLATFORMS.md) và [kết quả kiểm thử](docs/TESTING.md).
 

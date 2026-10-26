@@ -15,7 +15,7 @@ Automated coverage includes parallel ranges, durable pause/resume, source change
 
 ## Limits
 
-- Windows/Linux desktop GUI has not been executed on a real target machine in this local review. GitHub Actions is configured to run source tests and build on native runners; inspect the actual workflow result before relying on it.
+- On 2026-10-26 the EXE and DEB installers passed native Windows/Ubuntu installation, desktop smoke and uninstall checks in [GitHub Actions run 40281380947](https://github.com/heroitvt/FakeIDM/actions/runs/40281380947). Both native jobs also passed all 26 automated tests. Linux ran on Ubuntu 26.04.1 under Xvfb and verified root:root 4755 Chromium sandbox permissions. These checks do not cover every Windows edition or Linux distribution.
 - Google Drive share-page/confirmation resolution and quota/access restrictions are not automatically handled. HTML is reported as an error, rather than saved as a successful file.
 - Extension logic is tested with browser API mocks; loading it in the user's real browser profile and downloads requiring a particular account still need a user-side check.
 - Native Mac launcher source is maintained, but this release request packages Windows/Linux. No newly built Mac binary is claimed here.
