@@ -116,3 +116,9 @@ Kết quả ở `build/FakeIDM.app`. Script dùng Node và kiến trúc máy bui
 [REA](https://github.com/morluto/rea) được dùng khi khảo sát ban đầu bằng phân tích tĩnh tài nguyên PE của bộ cài IDM. REA không phải bộ tải, không chạy trong FakeIDM và không được đóng gói cùng ứng dụng. Bộ tải được viết độc lập; không đưa bộ cài hoặc tài sản IDM vào repo. Xem [nguồn tham khảo](docs/RESEARCH.md).
 
 Mã FakeIDM theo [MIT License](LICENSE); runtime giữ giấy phép riêng trong [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Xem [CONTRIBUTING.md](CONTRIBUTING.md) và [SECURITY.md](SECURITY.md).
+
+## Bộ cài Windows và Debian/Ubuntu
+
+Tải `.exe` và `.deb` tại [GitHub Releases](https://github.com/heroitvt/FakeIDM/releases/latest). Xem [hướng dẫn cài đặt](docs/RELEASE-NOTES.md). Workflow `Build and publish installers` kiểm thử cài đặt, mở desktop và gỡ cài đặt trên Windows/Ubuntu trước khi phát hành.
+
+Build từ mã nguồn: `npm run package:win` rồi `npm run installer:win` trên Windows có NSIS; `npm run package:linux` rồi `npm run installer:linux` trên Linux có dpkg-deb.

@@ -2,7 +2,7 @@
 
 ## Windows x64
 
-Giải nén toàn bộ ZIP rồi mở `FakeIDM.exe`. Không di chuyển riêng EXE: chương trình cần DLL, resources và locales bên cạnh. Chưa có MSI/NSIS hoặc chứng thư ký mã nhà phát hành. Không cần Administrator.
+Giải nén toàn bộ ZIP rồi mở `FakeIDM.exe`. Không di chuyển riêng EXE: chương trình cần DLL, resources và locales bên cạnh. Bộ cài NSIS `FakeIDM-1.2.0-Windows-x64-Setup.exe` cài cho tài khoản hiện tại, thêm shortcut và trình gỡ cài đặt. Chưa có chứng thư ký mã nhà phát hành. Không cần Administrator.
 
 Dữ liệu ở `%APPDATA%\FakeIDM`. Ổ đích cần hỗ trợ hard link (thường là NTFS) để hoàn tất file mà không ghi đè tên đã có; FAT/exFAT và một số network shares chưa được hỗ trợ đầy đủ.
 
@@ -14,7 +14,7 @@ cd FakeIDM-1.2.0-Linux-x64
 ./Start-FakeIDM.sh
 ```
 
-Nếu mất quyền executable sau giải nén, chạy `chmod +x Start-FakeIDM.sh fakeidm chrome-sandbox`. Cần desktop glibc với GTK3/NSS và trình quản lý file; gói này chưa phải AppImage/DEB/RPM.
+Nếu mất quyền executable sau giải nén, chạy `chmod +x Start-FakeIDM.sh fakeidm chrome-sandbox`. Cần desktop glibc với GTK3/NSS và trình quản lý file; bản portable không phải AppImage/RPM. Có thêm gói DEB: `sudo apt install ./FakeIDM-1.2.0-Linux-amd64.deb`, mở từ menu ứng dụng hoặc lệnh `fakeidm`. DEB cài sandbox root:root 4755, không tắt sandbox.
 
 Sandbox Chromium vẫn bật. Một số distro hạn chế user namespace hoặc cần cấu hình sandbox/AppArmor cho ứng dụng ngoài kho. Nếu gặp lỗi sandbox, giữ thông báo để cấu hình theo chính sách distro hoặc báo issue. Launcher không tự dùng `--no-sandbox`, gọi sudo hoặc thay đổi bảo vệ toàn hệ thống.
 

@@ -32,7 +32,9 @@
     "package:win": "node scripts/package.mjs win32",
     "package:linux": "node scripts/package.mjs linux",
     "package:mac": "bash build-macos.sh",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "installer:win": "node scripts/installer.mjs win32",
+    "installer:linux": "node scripts/installer.mjs linux"
   },
   "engines": {
     "node": ">=22"

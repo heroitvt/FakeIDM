@@ -1,0 +1,104 @@
+name: Build and publish installers
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/installers.yml'
+      - 'scripts/**'
+      - 'package*.json'
+      - '*.mjs'
+      - '*.cjs'
+      - 'public/**'
+      - 'extension/**'
+permissions:
+  contents: read
+concurrency:
+  group: installers-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: win
+          - os: ubuntu-latest
+            target: linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - if: runner.os == 'Windows'
+        run: choco install nsis --no-progress -y
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y xvfb libgtk-3-0 libnss3 libasound2t64
+      - run: npm run package:${{ matrix.target }}
+      - run: npm run installer:${{ matrix.target }}
+      - name: Install and launch Windows EXE
+        if: runner.os == 'Windows'
+        shell: pwsh
+        timeout-minutes: 3
+        run: |
+          $setup = (Get-ChildItem dist/*-Setup.exe).FullName
+          $p = Start-Process $setup -ArgumentList '/S' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "Installer failed: $($p.ExitCode)" }
+          $exe = "$env:LOCALAPPDATA\Programs\FakeIDM\FakeIDM.exe"
+          if (!(Test-Path $exe)) { throw 'Installed EXE missing' }
+          $env:FAKEIDM_PROFILE = "$env:RUNNER_TEMP\fakeidm-profile"
+          $env:FAKEIDM_DATA = "$env:RUNNER_TEMP\fakeidm-data"
+          $env:FAKEIDM_PORT = '0'
+          $p = Start-Process $exe -ArgumentList '--smoke-test' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "Desktop smoke failed: $($p.ExitCode)" }
+          $p = Start-Process "$env:LOCALAPPDATA\Programs\FakeIDM\Uninstall.exe" -ArgumentList '/S' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw 'Uninstaller failed' }
+      - name: Install and launch Linux DEB
+        if: runner.os == 'Linux'
+        timeout-minutes: 3
+        run: |
+          sudo apt-get install -y ./dist/*.deb
+          test "$(stat -c '%U:%G %a' /opt/fakeidm/chrome-sandbox)" = 'root:root 4755'
+          FAKEIDM_PROFILE="$RUNNER_TEMP/fakeidm-profile" FAKEIDM_DATA="$RUNNER_TEMP/fakeidm-data" FAKEIDM_PORT=0 xvfb-run -a fakeidm --smoke-test
+          sudo apt-get remove -y fakeidm
+          test ! -e /opt/fakeidm/fakeidm
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: installer-${{ matrix.target }}
+          path: |
+            dist/*-Setup.exe
+            dist/*-Setup.exe.sha256
+            dist/*.deb
+            dist/*.deb.sha256
+          if-no-files-found: error
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Publish verified installers
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          gh run download "$RUN_ID" -n installer-win -D release
+          gh run download "$RUN_ID" -n installer-linux -D release
+          cd release
+          sha256sum -c ./*.sha256
+          cat ./*.sha256 > SHA256SUMS.txt
+          version=$(node -p "require('../package.json').version")
+          tag="v${version}"
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            gh release create "$tag" --target "$GITHUB_SHA" --title "FakeIDM $version" --notes-file ../docs/RELEASE-NOTES.md
+          fi
+          gh release upload "$tag" ./* --clobber
