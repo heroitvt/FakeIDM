@@ -1,0 +1,32 @@
+name: Publish macOS 1.2.0 release asset
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-mac-1.2.0.yml']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: publish-mac-1.2.0
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify existing build and publish macOS artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GH_REPO/actions/runs/40281380985" > run.json
+          jq -e '.conclusion == "success" and .head_sha == "eb76cc3afa097234cdc6d8d6e3db3b85cb8cfffa"' run.json
+          gh release view v1.2.0
+          gh run download 40281380985 -n FakeIDM-Mac-Intel -D mac
+          cd mac
+          sha256sum -c SHA256SUMS.txt
+          unzip -tq FakeIDM-1.2.0-Mac-Intel.zip
+          sha256sum FakeIDM-1.2.0-Mac-Intel.zip > FakeIDM-1.2.0-Mac-Intel.zip.sha256
+          gh release upload v1.2.0 FakeIDM-1.2.0-Mac-Intel.zip FakeIDM-1.2.0-Mac-Intel.zip.sha256 --clobber
